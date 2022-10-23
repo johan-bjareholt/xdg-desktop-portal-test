@@ -11,3 +11,5 @@ Call failed: Access denied
 To fix, we need to either
 - open dconf-editor and set org.gnome.shell.introspection to true
 - have the org.freedesktop.impl.portal.desktop.gtk name
+
+NOTE: This will not work on newer versions of Gnome Shell! (around version 40/41 something)
