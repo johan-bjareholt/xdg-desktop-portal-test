@@ -1,0 +1,79 @@
+<?xml version="1.0"?>
+<!--
+ Copyright (C) 2022 Johan Bjäreholt
+ This library is free software; you can redistribute it and/or
+ modify it under the terms of the GNU Lesser General Public
+ License as published by the Free Software Foundation; either
+ version 2 of the License, or (at your option) any later version.
+ This library is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ Lesser General Public License for more details.
+ You should have received a copy of the GNU Lesser General Public
+ License along with this library. If not, see <http://www.gnu.org/licenses/>.
+ Author: Johan Bjäreholt <johan@bjareho.lt>
+-->
+
+<!--
+    TODO: Do we also need a signal for when ANY application changes?
+    TODO: How should we handle seats? (or should we even?)
+          The "FocusedWindowChanged" signal will need modifications.
+-->
+
+<node name="/" xmlns:doc="http://www.freedesktop.org/dbus/1.0/doc.dtd">
+  <!--
+    org.freedesktop.portal.Settings:
+    @short_description: Settings interface
+
+    This interface provides access to the current state or changes of the
+    shells open windows. For example, allows an application to be informed
+    about the name of all windows, which window is currently focused and which
+    windows are currently mimimized.
+  -->
+  <interface name="org.freedesktop.portal.WindowActivity">
+
+    <!--
+      GetWindows:
+      @windows: array of open windows.
+
+      A window has the following properties:
+      - 0: title
+      - 1: appid
+      - 2: visible (false means hidden/minimized)
+      - 3: has focus (multiple windows can have focus if there are multiple
+           seats)
+
+      TODO: Is an tuple like this OK, or should we use a dict with property
+            names in the message? Each have their own pros and cons
+            - having tuple: Small payloads.
+                            Forward compatibility if we want more properties is
+                            possible by adding more items to the end of the
+                            tuple.
+                            Quite hard to understand which each field means,
+                            unless you read the documentation.
+            - having dict:  Large payloads
+                            Forward compatiblity possible by just adding new
+                            keys with new names.
+                            Easy to understand which each field means.
+    -->
+    <method name='GetWindows'>
+      <arg name='windows' direction='out' type='a(ssbb)'/>
+    </method>
+
+    <!--
+      FocusedWindowChanged:
+      @title: The title of the window
+      @appid: The id of the application owning the window
+
+      Emitted when a seat switches focus from one seat to another
+    -->
+    <!-- TODO: Implement
+    <signal name='FocusedWindowChanged'>
+      <arg name='title' direction='out' type='s'/>
+      <arg name='appid' direction='out' type='s'/>
+    </signal>
+    -->
+
+    <property name="version" type="u" access="read"/>
+  </interface>
+</node>
